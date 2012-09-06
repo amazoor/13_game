@@ -10,6 +10,7 @@ package view
 	public class GameController extends Sprite
 	{
 		private var _screen:AbstractScreen;
+		private var _level:uint = 1;
 		
 		public function GameController()
 		{
@@ -49,7 +50,7 @@ package view
 					break;
 				
 				case Screen.PLAY_SCREEN:
-					screen = new GameScreen();
+					screen = new GameScreen(_level);
 					break;
 				
 				case Screen.TITLE_SCREEN:

@@ -19,33 +19,72 @@ package view
 		private static const WIDTH:uint = 155;
 		private static const HEIGHT:uint = 155;
 		
+		private var _container:Sprite = new Sprite();
+		
 		public var bgColor:uint;
 		public var bgImageAlpah:String;
 		public var borderStyle:String;
 		public var figure:String;
 		public var figureColor:uint;
 		public var fill:String;
+		public var figuresAmount:uint;
 		
-		public static const BG_COLORS:Array = [Colors.BLUE, Colors.GREEN, Colors.RED, Colors.NO_COLOR];
+		public static const BG_COLORS:Array = [Colors.WHITE, Colors.GREY, Colors.BIEGE];
 		public static const BG_IMAGE_ALPHAS:Array = [ BGAlphaStyle.DIAGONAL_LINES, BGAlphaStyle.HORIZONTAL_LINES, BGAlphaStyle.VERTICAL_LINES ];
 		public static const BORDER_STYLES:Array = [BorderStyle.DASHED, BorderStyle.DOTS, BorderStyle.SOLID];
 		public static const FIGURES:Array = [ FIgures.CIRCLE, FIgures.TRIANGLE, FIgures.SQUARE];
-		public static const FIGURE_COLORS:Array = [Colors.BLUE, Colors.GREEN, Colors.RED, Colors.NO_COLOR];
+		public static const FIGURE_COLORS:Array = [Colors.BLUE, Colors.GREEN, Colors.RED];
 		public static const FILL:Array = [Fill.BORDER, Fill.FILL, Fill.GRADIENT];
+		public static const FIGURES_AMOUNT:Array = [1 , 2, 3];
 		
-		public function makeSymbol(bgColor:uint = NaN, bgImageAlpha:String = "", borderStyle:String = "", firure:String = "", firureColor:uint = NaN, fill:String = ""):void {
+		private var _imageSource:String;
+		
+		public function get imageSource():String
+		{
+			return _imageSource;
+		}
+
+		private var img:Image = new Image();
+		public function set imageSource(value:String):void
+		{
+			while(numChildren) {
+				removeChildAt(0);
+			}
+			
+			_imageSource = value;
+			img.addEventListener(ImageEvent.IMAGE_LOAD_COMPLETE, onImageLoaded);
+			img.source = value;
+			
+			addChild(img);
+			
+		}
+		
+		protected function onImageLoaded(event:ImageEvent):void
+		{
+			img.x = -img.width / 2;
+			img.y = -img.height/ 2;			
+		}
+		
+		private function makeSymbol(bgColor:uint = NaN, bgImageAlpha:String = "", borderStyle:String = "", firure:String = "", firureColor:uint = NaN, fill:String = "", figuresAmount:uint = NaN):void {
+			while(numChildren) {
+				removeChildAt(0);
+			}
+			
+			addChild(_container);
+			
 			this.bgColor = bgColor;
 			this.bgImageAlpah = bgImageAlpha;
 			this.borderStyle = borderStyle;
 			this.figure = firure;
 			this.figureColor = firureColor;
 			this.fill = fill;
+			this.figuresAmount = figuresAmount;
 			
 			var bg:Sprite = new Sprite();
 			bg.graphics.beginFill(bgColor);
 			bg.graphics.drawRect(0, 0, WIDTH, HEIGHT);
 			bg.graphics.endFill();
-			addChild(bg);
+			_container.addChild(bg);
 			
 			var bgImage:Image;
 			
@@ -70,7 +109,7 @@ package view
 					break;
 			}
 			
-			addChild(bgImage);
+			_container.addChild(bgImage);
 			
 			var border:Image;
 			switch (borderStyle) {
@@ -88,30 +127,13 @@ package view
 				
 			}
 			
-			addChild(border);
-			
-			
-			
-			switch (fill) {
-				case Fill.BORDER:
-					
-					break;
-				
-				case Fill.GRADIENT:
-					
-					break;
-				
-				case Fill.FILL:
-					
-					break;
-			}
-			
+			_container.addChild(border);
 			
 			var canvas:Sprite = new Sprite();
 			canvas.graphics.beginFill(firureColor);
 			canvas.graphics.drawRect(0, 0, WIDTH, HEIGHT);
 			canvas.graphics.endFill();
-			//	addChild(canvas);
+			
 			
 			var fig:Image = new Image();
 			fig.addEventListener(ImageEvent.IMAGE_LOAD_COMPLETE, drawShape);
@@ -144,15 +166,18 @@ package view
 					break;
 			}
 			
-			//addChild(fig);
-			
-			//fig.mask = canvas;
-			//canvas.blendMode = BlendMode.ERASE;
-			//canvas.blendMode = BlendMode.ALPHA;
+			_container.x = -_container.width / 2;
+			_container.y = -_container.height/ 2;
 		}
 		
-		private function drawShape(e:ImageEvent):Bitmap {
+		private function drawShape(e:ImageEvent):void {
 			var shape:Image = e.currentTarget as Image;
+			shape.colorize(figureColor);
+			addChild(shape);
+			var f:Image = shape.clone();
+			f.x = 100;
+			addChild(f);
+			/*var shape:Image = e.currentTarget as Image;
 			var c:Bitmap;
 			var bd:BitmapData = new BitmapData(shape.width, shape.height );
 			for (var i:int = 0; i < shape.bitmap.width; i++) {
@@ -170,14 +195,17 @@ package view
 						bd.setPixel32(i, j, 0x00000000);
 					}
 				}	
-			}
+			}*/
 			
-			c = new Bitmap(bd, "auto", true);
+			/*c = new Bitmap(bd, "auto", true);
 			c.scaleX = c.scaleY = .99;
 			c.x = WIDTH / 2 - c.width / 2
 			c.y = HEIGHT / 2 - c.height / 2;
-			addChild(c);
-			return c;
+			_container.addChild(c);
+			//shape.bitmap = c;
+			var clone:Image = shape.clone();
+			addChild(clone); clone.x = 40;*/
+			
 		}
 		
 		public function getSymbol():void
@@ -188,8 +216,8 @@ package view
 			figure = FIGURES[Math.floor(Math.random() * FIGURES.length)];
 			figureColor = FIGURE_COLORS[Math.floor(Math.random() * FIGURE_COLORS.length)];
 			fill = FILL[Math.floor(Math.random() * FILL.length)];
-			
-			makeSymbol(bgColor, bgImageAlpah, borderStyle, figure, figureColor, fill);
+			figuresAmount = FIGURES_AMOUNT[Math.floor(Math.random() * FIGURES_AMOUNT.length)]
+			makeSymbol(bgColor, bgImageAlpah, borderStyle, figure, figureColor, fill, figuresAmount);
 		}
 	}
 }

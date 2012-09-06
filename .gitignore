@@ -1,0 +1,17 @@
+*Thumbs.db
+.DS_Store
+
+.metadata
+.actionScriptProperties
+.flexProperties
+.project
+.settings
+*.as3proj
+
+bin-debug
+bin-debug*
+bin-release
+bin
+/html-template
+
+/obj
