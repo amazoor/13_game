@@ -43,7 +43,7 @@ package view
 		{
 			return _imageSource;
 		}
-
+		
 		private var img:Image = new Image();
 		public function set imageSource(value:String):void
 		{
@@ -171,41 +171,41 @@ package view
 		}
 		
 		private function drawShape(e:ImageEvent):void {
+			
 			var shape:Image = e.currentTarget as Image;
-			shape.colorize(figureColor);
 			addChild(shape);
-			var f:Image = shape.clone();
-			f.x = 100;
-			addChild(f);
-			/*var shape:Image = e.currentTarget as Image;
-			var c:Bitmap;
-			var bd:BitmapData = new BitmapData(shape.width, shape.height );
-			for (var i:int = 0; i < shape.bitmap.width; i++) {
-				for (var j:int = 0; j < shape.bitmap.height; j++) {
-					if (shape.bitmap.bitmapData.getPixel(i, j) != 0) {
-						var pix:uint = shape.bitmap.bitmapData.getPixel32(i, j);
-						var alphaVal:uint = pix >> 24 & 0xFF;
-						
-						var argb:uint = 0;
-						argb += (alphaVal<<24);
-						argb += (figureColor);
-						
-						bd.setPixel32(i, j, argb);
-					} else {
-						bd.setPixel32(i, j, 0x00000000);
-					}
-				}	
-			}*/
-			
-			/*c = new Bitmap(bd, "auto", true);
-			c.scaleX = c.scaleY = .99;
-			c.x = WIDTH / 2 - c.width / 2
-			c.y = HEIGHT / 2 - c.height / 2;
-			_container.addChild(c);
-			//shape.bitmap = c;
-			var clone:Image = shape.clone();
-			addChild(clone); clone.x = 40;*/
-			
+			switch (figuresAmount) {
+				case 1:
+					shape.colorize(figureColor);
+					shape.x = -shape.width / 2;
+					shape.y = -shape.height / 2;
+					break;
+				
+				case 2:
+					shape.colorize(figureColor);
+					shape.x += 10;
+					shape.scaleX = shape.scaleY = .5;
+					var copy1:Image = shape.clone();
+					copy1.scaleX = copy1.scaleY = .5;
+					copy1.x -= copy1.width + 10;
+					shape.y = copy1.y -= 30;
+					addChild(copy1);
+					break;
+				
+				case 3:
+					shape.colorize(figureColor);
+					shape.x += 10;
+					shape.scaleX = shape.scaleY = .5;
+					var copy:Image = shape.clone();
+					copy.scaleX = copy.scaleY = .5;
+					var copyTop:Image = shape.clone();
+					copyTop.scaleX = copyTop.scaleY = .5;
+					copy.x -= copy.width + 10;
+					copyTop.x -= copyTop.width / 2;
+					copyTop.y -= copyTop.height + 10;
+					addChild(copyTop);
+					addChild(copy);
+			}
 		}
 		
 		public function getSymbol():void

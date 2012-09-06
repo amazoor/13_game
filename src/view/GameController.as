@@ -50,11 +50,15 @@ package view
 					break;
 				
 				case Screen.PLAY_SCREEN:
-					screen = new GameScreen(_level);
+					screen = new GameScreen(event.level);
 					break;
 				
 				case Screen.TITLE_SCREEN:
 					screen = new TitleScreen();
+					break;
+				
+				case Screen.LEVEL_CHOOSE__SCREEN:
+					screen = new LevelSelectScreen();
 					break;
 			}
 			

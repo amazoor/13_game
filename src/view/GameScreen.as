@@ -44,8 +44,6 @@ package view {
 			
 			this.level = level;
 			
-			
-			
 			_bg = new Image("assets/bg/scene2_bg.png");
 			addChild(_bg);
 			
@@ -150,9 +148,9 @@ package view {
 			cardsLeft--;
 			
 			if ( _rules.checkRule(this["sym"] as Symbol) ) {
-				TweenNano.to(sym, .2, {x:_cardRight.x + _cardRight.width / 2, y:_cardRight.y + _cardRight.height /2, onComplete:rotate});
+				TweenNano.to(sym, .4, {x:_cardRight.x + _cardRight.width / 2, y:_cardRight.y + _cardRight.height /2, onComplete:rotate});
 			} else {
-				TweenNano.to(sym, .2, {x:_cardLeft.x + _cardLeft.width / 2, y:_cardLeft.y + _cardLeft.height /2, onComplete:rotate});
+				TweenNano.to(sym, .4, {x:_cardLeft.x + _cardLeft.width / 2, y:_cardLeft.y + _cardLeft.height /2, onComplete:rotate});
 			}
 		}
 		
@@ -161,26 +159,26 @@ package view {
 			cardsLeft--;
 			
 			if ( !_rules.checkRule( this["sym"] as Symbol) ) {
-				TweenNano.to(sym, .2, {x:_cardLeft.x + _cardLeft.width / 2, y:_cardLeft.y + _cardLeft.height /2, onComplete:rotate});
+				TweenNano.to(sym, .4, {x:_cardLeft.x + _cardLeft.width / 2, y:_cardLeft.y + _cardLeft.height /2, onComplete:rotate});
 			}	else {
-				TweenNano.to(sym, .2, {x:_cardRight.x + _cardRight.width / 2, y:_cardRight.y + _cardRight.height /2, onComplete:rotate});
+				TweenNano.to(sym, .4, {x:_cardRight.x + _cardRight.width / 2, y:_cardRight.y + _cardRight.height /2, onComplete:rotate});
 				
 			}
 		}
 		
 		private function rotate():void {
-			TweenNano.to(sym, .15, {rotationY:-110, onComplete:finalRotate, ease:Linear.easeNone});
+			TweenNano.to(sym, .2, {scaleX:0, onComplete:finalRotate, ease:Linear.easeNone});
 		}
 		
 		private function finalRotate():void {
 			sym.imageSource = _cardLeft.source; 
-			TweenNano.to(sym, .15, {rotationY:0, ease:Linear.easeNone, onComplete:showNextCard});
+			TweenNano.to(sym, .2, {scaleX:1, ease:Linear.easeNone, onComplete:showNextCard});
 		
 		}
 		
 		private function showNextCard():void {
 			sym.getSymbol();
-			//addChild(sym);
+			
 			sym.x = 319;
 			sym.y = 267;
 		}

@@ -17,14 +17,15 @@ package model
 		public  var figure:String;
 		public  var figureColor:uint;
 		public  var fill:String;
+		public  var figuresAmount:uint;
 		
 		public  const RULE_1:Array = ["figureColor", "fill"];
 		public  const RULE_2:Array = ["figureColor", "fill", "figure"];
 		public  const RULE_3:Array = ["figureColor", "fill", "figure", "borderStyle"];
-		public  const RULE_4:Array = ["bgColor", "bgImageAlpah", "borderStyle", "figure", "figureColor", "fill"];
-		public  const RULE_5:Array = ["bgColor", "bgImageAlpah", "borderStyle", "figure", "figureColor", "fill"];
-		public  const RULE_6:Array = ["bgColor", "bgImageAlpah", "borderStyle", "figure", "figureColor", "fill"];
-		public  const RULE_7:Array = ["bgColor", "bgImageAlpah", "borderStyle", "figure", "figureColor", "fill"];
+		public  const RULE_4:Array = ["figureColor", "fill", "figure", "figuresAmount"];
+		public  const RULE_5:Array = ["figureColor", "fill", "figure", "figuresAmount", "borderStyle"];
+		public  const RULE_6:Array = ["bgImageAlpah", "borderStyle", "figure", "figureColor", "fill", "figuresAmount"];
+		public  const RULE_7:Array = ["bgColor", "bgImageAlpah", "borderStyle", "figure", "figureColor", "fill", "figuresAmount"];
 		
 		public  const BG_COLORS:Array = [Colors.WHITE, Colors.GREY, Colors.BIEGE];
 		public  const BG_IMAGE_ALPHAS:Array = [ BGAlphaStyle.DIAGONAL_LINES, BGAlphaStyle.HORIZONTAL_LINES, BGAlphaStyle.VERTICAL_LINES ];
@@ -32,6 +33,8 @@ package model
 		public  const FIGURES:Array = [ FIgures.CIRCLE, FIgures.TRIANGLE, FIgures.SQUARE];
 		public  const FIGURE_COLORS:Array = [Colors.BLUE, Colors.GREEN, Colors.RED];
 		public  const FILL:Array = [Fill.BORDER, Fill.FILL, Fill.GRADIENT];
+		public  const FIGURES_AMOUNT:Array = [1, 2, 3];
+		
 		public  var dict:Dictionary = new Dictionary();
 		public  var rule:String;
 		
@@ -56,6 +59,10 @@ package model
 					break;
 				case "borderStyle":
 					dict[rule] = BORDER_STYLES[Math.floor(Math.random() * BORDER_STYLES.length)];
+					break;
+				
+				case "figuresAmount":
+					dict[rule] = FIGURES_AMOUNT[Math.floor(Math.random() * FIGURES_AMOUNT.length)];
 					break;
 			}
 			
