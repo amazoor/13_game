@@ -3,13 +3,18 @@ package {
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	
-	import view.GameController;
+	import flash.utils.Dictionary;
 	
 	import interfaces.IStartup;
 	
+	import view.GameController;
+	import view.TipCard;
+	
 	[SWF(width="640", height="480", backgroundColor="0xCCCCCC")]
 	public class Main extends Sprite implements IStartup {
+		[Embed(source="assets/font/MyriadPro-Regular.otf",	fontName = "MPR",	mimeType = "application/x-font", advancedAntiAliasing="true", embedAsCFF="false")] private var MyriadProRegular:Class;
+		[Embed(source="assets/font/MyriadPro-Semibold.otf", fontName = "MPS", mimeType = "application/x-font", advancedAntiAliasing="true", embedAsCFF="false")] private var MyriadProSemibold:Class;
+		
 		public static var flashVars			:Object;
 		public static var fixPath			:String;
 		
@@ -21,9 +26,9 @@ package {
 			_sccClientController = new SCClientController();
 			
 			if (stage) 
-				initApplication();
+			initApplication();
 			else 
-				addEventListener(Event.ADDED_TO_STAGE, initApplication);
+			addEventListener(Event.ADDED_TO_STAGE, initApplication);
 		}
 		
 		private function initApplication(event:Event = null):void {

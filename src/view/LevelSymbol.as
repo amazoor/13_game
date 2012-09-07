@@ -28,8 +28,9 @@ package view
 				_label.text = level.toString();
 				
 				_label.x = 30;
-				_label.y = 27;
-				
+				_label.y = 23;
+				_label.color= 0x718E92;
+				_label.font = "MPS";
 				_card.source = "assets/rubaha/rubaha"+level+".png";
 				addChild(_card);
 				_card.scaleX = _card.scaleY = .5;

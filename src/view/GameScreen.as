@@ -16,6 +16,9 @@ package view {
 	import view.symbol.Fill;
 
 	public class GameScreen extends AbstractScreen {
+		private var _rightAnswers:uint; 
+		private var _wrongAnswers:uint;
+		
 		private var _rules:Rules = new Rules();
 		private var _bg		:Image;
 		private var _yes	:Button;
@@ -34,6 +37,12 @@ package view {
 		private var _pointsLable		:Label;
 		private var _ruleLabel			:Label;
 		
+		public static const RIGHT_ANSWERS_TARGET:uint = 5;
+		public static const WRONG_ANSWERS_TARGET:uint = 10;
+		
+		private var _lastRightCard:Symbol = new Symbol();
+		private var _lastWrongCard:Symbol = new Symbol();
+		
 		public function GameScreen(level:uint) {
 			_cardsLeftLabel = new Label();
 			_pointsLable = new Label();
@@ -41,6 +50,8 @@ package view {
 			
 			_cardsLeftLabel.x = 275;
 			_cardsLeftLabel.y = 6;
+			_cardsLeftLabel.color = 0x006837;
+			_cardsLeftLabel.font = "MPS";
 			
 			this.level = level;
 			
@@ -82,7 +93,67 @@ package view {
 			addChild(_pointsLable);
 			addChild(_ruleLabel);
 			
+			
+			
+			
+			
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
+			
+			
+		}
+		
+		public function get wrongAnswers():uint
+		{
+			return _wrongAnswers;
+		}
+
+		public function set wrongAnswers(value:uint):void
+		{
+			_wrongAnswers = value;
+			_lastWrongCard = sym.clone();
+			
+			if (_wrongAnswers == WRONG_ANSWERS_TARGET) {
+				_wrongAnswers = 0;
+				trace("aa");
+				addChild(_lastWrongCard);
+				_lastWrongCard.x = 20 + 77;
+				_lastWrongCard.y = 85 + 77;
+				
+				addChild(_lastRightCard);
+				_lastRightCard.x = 470 + 77;
+				_lastRightCard.y = 85 + 77;
+				//showLasrRule();
+			}
+		}
+		
+		private function showLasrRule():void
+		{
+			removeChild(_lastWrongCard);
+			removeChild(_lastRightCard);
+		}
+		
+		public function get rightAnswers():uint
+		{
+			return _rightAnswers;
+		}
+
+		public function set rightAnswers(value:uint):void
+		{
+			
+				
+			
+			_rightAnswers = value;
+			
+			
+			if (_rightAnswers == RIGHT_ANSWERS_TARGET) {
+				_rightAnswers = 0;
+				generateNextRule();
+			}
+		}
+		
+		private function generateNextRule():void
+		{
+			
 		}
 		
 		public function get cardsLeft():uint
@@ -143,15 +214,22 @@ package view {
 			sym.y = 267;
 		}
 		
-		protected function onYesClick(event:MouseEvent = null):void
-		{
+		protected function onYesClick(event:MouseEvent = null):void {
 			cardsLeft--;
 			
 			if ( _rules.checkRule(this["sym"] as Symbol) ) {
 				TweenNano.to(sym, .4, {x:_cardRight.x + _cardRight.width / 2, y:_cardRight.y + _cardRight.height /2, onComplete:rotate});
+				_lastRightCard = sym.clone();
+				rightAnswers++;
+				wrongAnswers = 0;
 			} else {
 				TweenNano.to(sym, .4, {x:_cardLeft.x + _cardLeft.width / 2, y:_cardLeft.y + _cardLeft.height /2, onComplete:rotate});
+				_lastWrongCard = sym.clone();
+				rightAnswers = 0;
+				wrongAnswers++;
 			}
+			trace("points:", rightAnswers);
+			trace("Wpoints:", wrongAnswers);
 		}
 		
 		protected function onNoClick(event:MouseEvent = null):void
@@ -160,10 +238,17 @@ package view {
 			
 			if ( !_rules.checkRule( this["sym"] as Symbol) ) {
 				TweenNano.to(sym, .4, {x:_cardLeft.x + _cardLeft.width / 2, y:_cardLeft.y + _cardLeft.height /2, onComplete:rotate});
+				_lastRightCard = sym.clone();
+				rightAnswers++;
+				wrongAnswers = 0;
 			}	else {
 				TweenNano.to(sym, .4, {x:_cardRight.x + _cardRight.width / 2, y:_cardRight.y + _cardRight.height /2, onComplete:rotate});
-				
+				_lastWrongCard = sym.clone();
+				rightAnswers = 0;
+				wrongAnswers++;
 			}
+			trace("points:", rightAnswers);
+			trace("Wpoints:", wrongAnswers);
 		}
 		
 		private function rotate():void {

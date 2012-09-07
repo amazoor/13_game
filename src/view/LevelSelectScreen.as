@@ -14,6 +14,8 @@ package view
 		
 		public function LevelSelectScreen()
 		{
+			_level.color = 0x718E92;
+			_level.font = "MPS";
 			addChild(_level);
 			var text:Image = new Image("assets/levelchoice/level_text.png");
 			addChild(text);
@@ -56,7 +58,7 @@ package view
 			bLeft.y = 365;
 			
 			_level.x = 365;
-			_level.y = 72;
+			_level.y = 68;
 			
 			bRight.x = 515;
 			bRight.y = 365;
@@ -117,6 +119,7 @@ package view
 		protected function onMC(event:MouseEvent):void
 		{
 			var ls:LevelSymbol = event.currentTarget as LevelSymbol;
+			_card.source = "assets/rubaha/rubaha"+ls.level+".png"
 			_level.text = ls.level.toString(); 
 		}
 		

@@ -35,9 +35,19 @@ package model
 		public  const FILL:Array = [Fill.BORDER, Fill.FILL, Fill.GRADIENT];
 		public  const FIGURES_AMOUNT:Array = [1, 2, 3];
 		
-		public  var dict:Dictionary = new Dictionary();
+		private  var _dict:Dictionary = new Dictionary();
 		public  var rule:String;
 		
+		public function get dict():Dictionary
+		{
+			return _dict;
+		}
+
+		public function set dict(value:Dictionary):void
+		{
+			_dict = value;
+		}
+
 		public  function generateRule(level:uint):void {
 			rule = this["RULE_"+level][Math.floor(Math.random() * RULE_1.length)];
 			

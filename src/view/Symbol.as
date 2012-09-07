@@ -37,6 +37,12 @@ package view
 		public static const FILL:Array = [Fill.BORDER, Fill.FILL, Fill.GRADIENT];
 		public static const FIGURES_AMOUNT:Array = [1 , 2, 3];
 		
+		public function clone():Symbol {
+			var clone:Symbol = new Symbol();
+			clone.makeSymbol(bgColor, bgImageAlpah, borderStyle, figure, figureColor, fill, figuresAmount);
+			return clone;
+		}
+		
 		private var _imageSource:String;
 		
 		public function get imageSource():String
@@ -65,7 +71,7 @@ package view
 			img.y = -img.height/ 2;			
 		}
 		
-		private function makeSymbol(bgColor:uint = NaN, bgImageAlpha:String = "", borderStyle:String = "", firure:String = "", firureColor:uint = NaN, fill:String = "", figuresAmount:uint = NaN):void {
+		public function makeSymbol(bgColor:uint = NaN, bgImageAlpha:String = "", borderStyle:String = "", firure:String = "", firureColor:uint = NaN, fill:String = "", figuresAmount:uint = NaN):void {
 			while(numChildren) {
 				removeChildAt(0);
 			}
