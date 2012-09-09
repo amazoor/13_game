@@ -106,7 +106,7 @@ package view
 			while(_cont.numChildren)
 			_cont.removeChildAt(0);
 			var count:uint;
-			for (var i:uint = start; i <= end; i++) {trace(i);
+			for (var i:uint = start; i <= end; i++) {
 				var ls:LevelSymbol = new LevelSymbol(i);
 				ls.addEventListener(MouseEvent.CLICK, onMC);
 				ls.x = 130 + ((75 * count) * 1.01) ;

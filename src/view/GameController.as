@@ -2,6 +2,7 @@ package view
 {
 	import events.GameEvents;
 	
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
@@ -9,12 +10,16 @@ package view
 	
 	public class GameController extends Sprite
 	{
+		[Embed (source="assets/bg/bg.jpg")]
+		private var BG:Class;
+		
 		private var _screen:AbstractScreen;
 		private var _level:uint = 1;
 		
 		public function GameController()
 		{
 			super();
+			addChild(new BG as Bitmap);
 		}
 		
 		public function get screen():AbstractScreen {

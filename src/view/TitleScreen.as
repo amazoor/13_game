@@ -1,6 +1,7 @@
 package view {
 	import events.GameEvents;
 	
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
 	import model.Screen;

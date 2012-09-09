@@ -48,9 +48,9 @@ package model
 			_dict = value;
 		}
 
-		public  function generateRule(level:uint):void {
+		public  function generateRule(level:uint):Dictionary {
 			rule = this["RULE_"+level][Math.floor(Math.random() * RULE_1.length)];
-			
+			dict = new Dictionary();
 			switch (rule) {
 				case "figureColor":
 					dict[rule] = FIGURE_COLORS[Math.floor(Math.random() * FIGURE_COLORS.length)];
@@ -76,8 +76,7 @@ package model
 					break;
 			}
 			
-			trace(rule, dict[rule]);
-			
+			return dict;
 		}
 		
 		public  function checkRule(symbol:Symbol):Boolean {
