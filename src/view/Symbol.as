@@ -30,7 +30,7 @@ package view
 		public var figuresAmount:uint;
 		
 		public static const BG_COLORS:Array = [Colors.WHITE, Colors.GREY, Colors.BIEGE];
-		public static const BG_IMAGE_ALPHAS:Array = [ BGAlphaStyle.DIAGONAL_LINES, BGAlphaStyle.HORIZONTAL_LINES, BGAlphaStyle.VERTICAL_LINES ];
+		public static const BG_IMAGE_ALPHAS:Array = [ BGAlphaStyle.DIAGONAL_LINES, BGAlphaStyle.HORIZONTAL_LINES, BGAlphaStyle.NO_LINES ];
 		public static const BORDER_STYLES:Array = [BorderStyle.DASHED, BorderStyle.DOTS, BorderStyle.SOLID];
 		public static const FIGURES:Array = [ FIgures.CIRCLE, FIgures.TRIANGLE, FIgures.SQUARE];
 		public static const FIGURE_COLORS:Array = [Colors.BLUE, Colors.GREEN, Colors.RED];
@@ -103,8 +103,8 @@ package view
 					bgImage.y = 22;
 					break;
 				
-				case BGAlphaStyle.VERTICAL_LINES:
-					bgImage = new Image("assets/symbols/symbol_11.png");
+				case BGAlphaStyle.NO_LINES:
+					bgImage = new Image();
 					bgImage.rotation = 90;
 					bgImage.scaleY = -1;
 					bgImage.x = 22;
@@ -214,15 +214,44 @@ package view
 			}
 		}
 		
-		public function getSymbol():void
-		{
-			bgColor = BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];
-			bgImageAlpah = BG_IMAGE_ALPHAS[Math.floor(Math.random() * BG_IMAGE_ALPHAS.length)];
-			borderStyle = BORDER_STYLES[Math.floor(Math.random() * BORDER_STYLES.length)];
-			figure = FIGURES[Math.floor(Math.random() * FIGURES.length)];
-			figureColor = FIGURE_COLORS[Math.floor(Math.random() * FIGURE_COLORS.length)];
-			fill = FILL[Math.floor(Math.random() * FILL.length)];
-			figuresAmount = FIGURES_AMOUNT[Math.floor(Math.random() * FIGURES_AMOUNT.length)]
+		public function getSymbol(level:uint):void {
+			bgColor 		= BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)]; //Цвет фона:
+			bgImageAlpah 	= BG_IMAGE_ALPHAS[Math.floor(Math.random() * BG_IMAGE_ALPHAS.length)]; //Узор фона:
+			borderStyle 	= BORDER_STYLES[Math.floor(Math.random() * BORDER_STYLES.length)]; //Граница фона:
+			figure 			= FIGURES[Math.floor(Math.random() * FIGURES.length)]; //Фигура
+			figureColor 	= FIGURE_COLORS[Math.floor(Math.random() * FIGURE_COLORS.length)]; //Цвет фигуры:
+			fill 			= FILL[Math.floor(Math.random() * FILL.length)]; //Заливка
+			figuresAmount 	= FIGURES_AMOUNT[Math.floor(Math.random() * FIGURES_AMOUNT.length)] ///Количество фигур:
+			
+			switch (level) {
+				case 1:
+					bgColor 		= Colors.WHITE;
+					bgImageAlpah 	= BGAlphaStyle.NO_LINES;
+					borderStyle 	= BorderStyle.SOLID;
+					figuresAmount 	= 1;
+					break;
+				case 2:
+					bgColor 		= Colors.WHITE;
+					bgImageAlpah 	= BGAlphaStyle.NO_LINES;
+					borderStyle 	= BorderStyle.SOLID;
+					break;
+				case 3: 
+					bgColor 		= Colors.WHITE;
+					bgImageAlpah 	= BGAlphaStyle.NO_LINES;
+					break;
+				case 4:
+					bgColor 		= Colors.WHITE;
+					bgImageAlpah 	= BGAlphaStyle.NO_LINES;
+					break;
+				case 5:
+					bgColor 		= Colors.WHITE;
+					
+					break;
+				case 6:
+					bgColor 		= Colors.WHITE;
+					break;
+			}
+			
 			makeSymbol(bgColor, bgImageAlpah, borderStyle, figure, figureColor, fill, figuresAmount);
 		}
 	}

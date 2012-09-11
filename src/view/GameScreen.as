@@ -8,30 +8,39 @@ package view {
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
-	import model.LevelDataGenerator;
 	import model.Rules;
-	import model.vo.LevelVO;
 
 	public class GameScreen extends AbstractScreen {
+		public static const MAX_CARDS		:uint = 90;
+		public static const MAX_TRIES		:uint = 20;
+		public static const MAX_WRONG_TRIES	:uint = 10;
+		public static const WIN_RULE_TRIES	:uint = 5;
+		
 		private var _rightAnswers:uint; 
 		private var _wrongAnswers:uint;
 		private var _rules:Rules = new Rules();
-		private var _level:uint;
+		private var _level:uint = 1;
 		private var _cardsLeft	:uint;
 		private var _points		:uint;
 		private var _rule		:uint;
 		
-		public static const RIGHT_ANSWERS_TARGET:uint = 5;
-		public static const WRONG_ANSWERS_TARGET:uint = 10;
+		private var _cardsUsed:uint;
 		
 		private var _skin:GameSkin;
 		
-		public function GameScreen(level:uint) {
+		private function countPoints():uint {
+			var levelBonus:uint = level * 100;
+			
+			var points:uint = levelBonus + (20 - _cardsUsed);
+			return points;
+		}
+		
+		public function GameScreen(startLevel:uint) {
 			_skin = new GameSkin();
 			addChild(_skin);
 			
-			this.level = level;
-			_skin.level = level;
+			this.level = startLevel;
+			_skin.level = startLevel;
 			_skin.showRuleCard(false);
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
 		}
@@ -43,7 +52,7 @@ package view {
 		public function set rightAnswers(value:uint):void
 		{
 			_rightAnswers = value;
-			if (_rightAnswers == RIGHT_ANSWERS_TARGET) {
+			if (_rightAnswers == WIN_RULE_TRIES) {
 				_rightAnswers = 0;
 				_skin.showRuleCard(true);
 				ruleComplete();
@@ -80,13 +89,12 @@ package view {
 			_skin.showRuleCard(false);
 			_skin.rule = _rules.generateRule(level);
 		}
-		private var _levelVO:LevelVO;
+		
 		private function startLevel(level:uint):void {
-			_levelVO = LevelDataGenerator.getlevelData(level);
-			_skin.cardsLeft = _levelVO.cardsLeft;
+			_skin.cardsLeft = MAX_TRIES;
 			
 			_skin.rule = _rules.generateRule(level);
-			_skin.generateCard();
+			_skin.generateCard(level);
 		}
 		
 		public function get cardRight():Image {
@@ -150,7 +158,7 @@ package view {
 		}
 		
 		private function showNextCard():void {
-			_skin.generateCard();
+			_skin.generateCard(level);
 		}
 		
 		protected function onKeyDown(event:KeyboardEvent):void

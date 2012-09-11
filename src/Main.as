@@ -3,12 +3,10 @@ package {
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.utils.Dictionary;
 	
 	import interfaces.IStartup;
 	
 	import view.GameController;
-	import view.TipCard;
 	
 	[SWF(width="640", height="480", backgroundColor="0xCCCCCC")]
 	public class Main extends Sprite implements IStartup {
@@ -62,8 +60,9 @@ package {
 		
 		public function start(flashVars:Object=null):void
 		{
+			var level:uint = 1;
 			addChild(_game);
-			_game.startGame();
+			_game.startGame(level);
 		}
 		
 	}

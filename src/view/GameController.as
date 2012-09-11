@@ -14,7 +14,6 @@ package view
 		private var BG:Class;
 		
 		private var _screen:AbstractScreen;
-		private var _level:uint = 1;
 		
 		public function GameController()
 		{
@@ -41,8 +40,10 @@ package view
 		public function set pause(value:Boolean):void {
 			
 		}
-		
-		public function startGame():void {
+		private var _level:uint;
+		public function startGame(level:uint):void {
+			_level = level;
+			_level = Math.floor(Math.random()*7) + 1;
 			_screen = new TitleScreen();
 			addChild(_screen);
 			_screen.addEventListener(GameEvents.SHOW_SCREEN, onChangeScreen);
@@ -54,16 +55,12 @@ package view
 					screen = new HowToPlayScreen();
 					break;
 				
-				case Screen.PLAY_SCREEN:
-					screen = new GameScreen(event.level);
+				case Screen.PLAY_SCREEN:trace(_level)
+					screen = new GameScreen(_level);
 					break;
 				
 				case Screen.TITLE_SCREEN:
 					screen = new TitleScreen();
-					break;
-				
-				case Screen.LEVEL_CHOOSE__SCREEN:
-					screen = new LevelSelectScreen();
 					break;
 			}
 			

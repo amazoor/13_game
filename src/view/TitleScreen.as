@@ -67,7 +67,7 @@ package view {
 			_howToPlatButton.removeEventListener(MouseEvent.CLICK, onHowToPlayGameMouseClick);
 			
 			var evt:GameEvents = new GameEvents(GameEvents.SHOW_SCREEN);
-			evt.screen = Screen.LEVEL_CHOOSE__SCREEN;
+			evt.screen = Screen.PLAY_SCREEN;
 			dispatchEvent(evt);
 		}
 	}

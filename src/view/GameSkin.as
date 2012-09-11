@@ -51,7 +51,6 @@ package view {
 		
 		public function GameSkin()
 		{
-			this.addEventListener(MouseEvent.MOUSE_MOVE, function(event:MouseEvent):void { trace(event.stageX, event.stageY) });
 			_pointsLabel.color = 0x006837;
 			_pointsLabel.x = 375;
 			_pointsLabel.y = 4;
@@ -177,10 +176,10 @@ package view {
 				_text = "Узор фона: \n";
 				if (value["bgImageAlpah"] == BGAlphaStyle.DIAGONAL_LINES)
 					_text += "клетка";
-				else if (value["bgImageAlpah"] == BGAlphaStyle.VERTICAL_LINES)
-					_text += "верт. линия";
+				else if (value["bgImageAlpah"] == BGAlphaStyle.NO_LINES)
+					_text += "пустой";
 				else if (value["bgImageAlpah"] == BGAlphaStyle.HORIZONTAL_LINES)
-					_text += "гориз. линия";
+					_text += "линейка";
 			}
 			
 			if (  value["borderStyle"]){
@@ -285,8 +284,8 @@ package view {
 			_cardsLeftLabel.text = value.toString();
 		}
 		
-		public function generateCard():void {
-			sym.getSymbol();
+		public function generateCard(level:uint):void {
+			sym.getSymbol(level);
 			
 			sym.x = 319;
 			sym.y = 267;
