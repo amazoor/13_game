@@ -11,6 +11,8 @@ package view {
 	import view.symbol.FIgures;
 	import view.symbol.Fill;
 	
+	import vo.SymbolVO;
+	
 	public class GameSkin extends Sprite {
 		private var _level:uint;
 		
@@ -24,33 +26,26 @@ package view {
 		
 		private var _cardsLeftLabel		:Label;
 		private var _ruleLabel			:Label;
+		private var _rulesCompleted		:Label;
 		
 		private var _lastRightCard:Symbol = new Symbol();
 		private var _lastWrongCard:Symbol = new Symbol();
 		
 		private var _ruleWas:Image = new Image("assets/more/paneltext_rulewas.png");
+		private var _lastChance:Image = new Image("assets/more/paneltext_lastchance.png");
 		private var _next:Button = new Button();
 		
 		private var _pointsLabel:Label = new Label("0");
+		private var _text:String;
 		
-		public function set cardsLeft(value:int):void {
-			_cardsLeftLabel.text = value.toString();
-		}
-		
-		public function get cardsLeft():int {
-			return parseInt(_cardsLeftLabel.text);
-		}
-		
-		public function set points(value:int):void {
-			_pointsLabel.text = value.toString();
-		}
-		
-		public function get points():int {
-			return parseInt(_pointsLabel.text);
-		}
-		
-		public function GameSkin()
-		{
+		public function GameSkin(){
+			_rulesCompleted = new Label();
+			_rulesCompleted.color = 0x006837;
+			_rulesCompleted.x = 500;
+			_rulesCompleted.y = 4;
+			_rulesCompleted.font = "MPS";
+			
+			
 			_pointsLabel.color = 0x006837;
 			_pointsLabel.x = 375;
 			_pointsLabel.y = 4;
@@ -101,20 +96,24 @@ package view {
 			_no.y = 260;
 			addChild(sym);
 			
-			
 			addChild(_ruleWas);
+			addChild(_lastChance);
 			addChild(_ruleLabel);
 			addChild(_pointsLabel);
 			addChild(_cardsLeftLabel);
+			addChild(_rulesCompleted);
 			_ruleLabel.color = 0xC1272D;
 			
 			_ruleWas.x = 319 - 77;
 			_ruleWas.y = 267 - 77;
+			_lastChance.x = 319 - 77;
+			_lastChance.y = 267 - 77;
 			
 			_next.upStateImage = "assets/Button/smallbutton_next_normal.png";
 			_next.overStateImage = "assets/Button/smallbutton_next_over.png";
 			_next.downStateImage = "assets/Button/smallbutton_next_down.png";
 			addChild(_next);
+			
 			_next.x  = _ruleWas.x + 21;
 			_next.y  = _ruleWas.y + 110;
 			_next.addEventListener(MouseEvent.CLICK, onNextButtonClick);
@@ -130,7 +129,12 @@ package view {
 			_ruleLabel.visible = show;
 		}
 		
-		private var _text:String;
+		public function showLastChance(show:Boolean):void {
+			_lastChance.visible = show; 
+			_next.visible		= show;
+		}
+		
+		
 		public function set rule(value:Dictionary):void {
 			if (value["figureColor"]) {
 				_text = "Цвет фигуры: \n";
@@ -185,7 +189,7 @@ package view {
 			if (  value["borderStyle"]){
 				_text = "Граница фона: \n";
 				if (value["borderStyle"] == BorderStyle.DASHED)
-					_text += "понктир";
+					_text += "пунктир";
 				else if (value["borderStyle"] == BorderStyle.DOTS)
 					_text += "точки";
 				else if (value["borderStyle"] == BorderStyle.SOLID)
@@ -193,7 +197,7 @@ package view {
 			}
 			
 			if (  value["figuresAmount"]){
-				_text = "Количество фигур: \n";
+				_text = "Кол-во фигур: \n";
 				if (value["figuresAmount"] == 1)
 					_text += "1";
 				else if (value["figuresAmount"] == 2)
@@ -208,63 +212,11 @@ package view {
 			trace(_ruleLabel.text)
 		}
 		
-		public function get lastWrongCard():Symbol
-		{
-			return _lastWrongCard;
-		}
-		
-		public function set lastWrongCard(value:Symbol):void
-		{
-			_lastWrongCard = value;
-		}
-		
-		public function get lastRightCard():Symbol
-		{
-			return _lastRightCard;
-		}
-		
-		public function set lastRightCard(value:Symbol):void
-		{
-			_lastRightCard = value;
-		}
-		
-		public function get cardRight():Image
-		{
-			return _cardRight;
-		}
-		
-		public function set cardRight(value:Image):void
-		{
-			_cardRight = value;
-		}
-		
-		public function get cardLeft():Image
-		{
-			return _cardLeft;
-		}
-		
-		public function set cardLeft(value:Image):void
-		{
-			_cardLeft = value;
-		}
-		
-		public function get sym():Symbol
-		{
-			return _sym;
-		}
-		
-		public function set sym(value:Symbol):void
-		{
-			_sym = value;
-		}
-		
-		protected function onNoClick(event:MouseEvent):void
-		{
+		protected function onNoClick(event:MouseEvent):void{
 			dispatchEvent(new GameEvents(GameEvents.NO_CLICK));
 		}
 		
-		protected function onYesClick(event:MouseEvent):void
-		{
+		protected function onYesClick(event:MouseEvent):void{
 			dispatchEvent(new GameEvents(GameEvents.YES_CLICK));
 		}
 		
@@ -291,7 +243,81 @@ package view {
 			sym.y = 267;
 		}
 		
-		public function showLastCombinations():void {
+		public function get rulesCompleted():uint {
+			return parseInt(_rulesCompleted.text);
+		}
+		
+		public function set rulesCompleted(value:uint):void{
+			_rulesCompleted.text = value.toString();
+		}
+		
+		public function set cardsLeft(value:int):void {
+			_cardsLeftLabel.text = value.toString();
+		}
+		
+		public function get cardsLeft():int {
+			return parseInt(_cardsLeftLabel.text);
+		}
+		
+		public function set points(value:int):void {
+			_pointsLabel.text = value.toString();
+		}
+		
+		public function get points():int {
+			return parseInt(_pointsLabel.text);
+		}
+		public function get lastWrongCard():Symbol{
+			return _lastWrongCard;
+		}
+		
+		public function set lastWrongCard(value:Symbol):void{
+			_lastWrongCard = value;
+		}
+		
+		public function get lastRightCard():Symbol{
+			return _lastRightCard;
+		}
+		
+		public function set lastRightCard(value:Symbol):void{
+			_lastRightCard = value;
+		}
+		
+		public function get cardRight():Image{
+			return _cardRight;
+		}
+		
+		public function set cardRight(value:Image):void{
+			_cardRight = value;
+		}
+		
+		public function get cardLeft():Image{
+			return _cardLeft;
+		}
+		
+		public function set cardLeft(value:Image):void{
+			_cardLeft = value;
+		}
+		
+		public function get sym():Symbol{
+			return _sym;
+		}
+		
+		public function set sym(value:Symbol):void{
+			_sym = value;
+		}	
+		
+		public function hideLastCombinations():void
+		{
+			_lastRightCard.visible = false;
+			_lastWrongCard.visible = false;
+		}
+		
+		public function showLastCombinations(wrong:SymbolVO, right:SymbolVO):void {
+			if (right.bgImageAlpah)
+				_lastRightCard.makeSymbolFromVO(right);
+			if (wrong.bgImageAlpah)
+				_lastWrongCard.makeSymbolFromVO(wrong);
+			
 			addChild(_lastWrongCard);
 			_lastWrongCard.x = 20 + 77;
 			_lastWrongCard.y = 85 + 77;
@@ -299,7 +325,9 @@ package view {
 			addChild(_lastRightCard);
 			_lastRightCard.x = 470 + 77;
 			_lastRightCard.y = 85 + 77;
+			
+			_lastRightCard.visible = true;
+			_lastWrongCard.visible = true;
 		}
-		
 	}
 }

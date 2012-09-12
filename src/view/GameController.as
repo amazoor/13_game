@@ -37,13 +37,9 @@ package view
 			}
 		}
 		
-		public function set pause(value:Boolean):void {
-			
-		}
 		private var _level:uint;
 		public function startGame(level:uint):void {
 			_level = level;
-			_level = Math.floor(Math.random()*7) + 1;
 			_screen = new TitleScreen();
 			addChild(_screen);
 			_screen.addEventListener(GameEvents.SHOW_SCREEN, onChangeScreen);
@@ -61,6 +57,10 @@ package view
 				
 				case Screen.TITLE_SCREEN:
 					screen = new TitleScreen();
+					break;
+				
+				case Screen.GAME_OVER_SCREEN:
+					screen = new GameOverScreen(event.level, event.points, event.rules);
 					break;
 			}
 			

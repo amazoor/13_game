@@ -1,5 +1,4 @@
-package view
-{
+package view {
 	import events.ImageEvent;
 	
 	import flash.display.Bitmap;
@@ -14,10 +13,11 @@ package view
 	import view.symbol.FIgures;
 	import view.symbol.Fill;
 	
-	public class Symbol extends Sprite
-	{
-		private static const WIDTH:uint = 155;
-		private static const HEIGHT:uint = 155;
+	import vo.SymbolVO;
+	
+	public class Symbol extends Sprite {
+		private static const WIDTH	:uint = 155;
+		private static const HEIGHT	:uint = 155;
 		
 		private var _container:Sprite = new Sprite();
 		
@@ -41,6 +41,22 @@ package view
 			var clone:Symbol = new Symbol();
 			clone.makeSymbol(bgColor, bgImageAlpah, borderStyle, figure, figureColor, fill, figuresAmount);
 			return clone;
+		}
+		
+		public function cloneVO():SymbolVO {
+			var symVO:SymbolVO	= new SymbolVO();
+			symVO.bgColor		= bgColor;
+			symVO.bgImageAlpah 	= bgImageAlpah;
+			symVO.borderStyle	= borderStyle;
+			symVO.figure		= figure;
+			symVO.figureColor	= figureColor;
+			symVO.fill			= fill;
+			symVO.figuresAmount = figuresAmount;
+			return symVO;
+		}
+		
+		public function makeSymbolFromVO(symVO:SymbolVO):void {
+			makeSymbol(symVO.bgColor, symVO.bgImageAlpah, symVO.borderStyle, symVO.figure, symVO.figureColor, symVO.fill, symVO.figuresAmount);
 		}
 		
 		private var _imageSource:String;

@@ -9,6 +9,10 @@ package events {
 		
 		public var screen:String;
 		
+		public var level	:uint;
+		public var rules	:uint;
+		public var points	:uint;
+		
 		public function GameEvents(type:String, bubbles:Boolean=false, cancelable:Boolean=false) {
 			super(type, bubbles, cancelable);
 		}

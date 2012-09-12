@@ -55,12 +55,12 @@ package {
 		}
 		
 		public function setPause(value:Boolean):void {
-			_game.pause = true;
+			
 		}
 		
 		public function start(flashVars:Object=null):void
 		{
-			var level:uint = 1;
+			var level:uint = Math.ceil(Math.random()*7);
 			addChild(_game);
 			_game.startGame(level);
 		}
