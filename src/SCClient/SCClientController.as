@@ -22,7 +22,7 @@ package SCClient
 		}
 		
 		public function scc_trace(e:*):void {
-			if (Main.flashVars.noContainerMode)
+			if (game.flashVars.noContainerMode)
 			trace(e);
 			return;
 			(Object(root) as Object).parent.scc_trace(e);
@@ -31,7 +31,7 @@ package SCClient
 		
 		
 		public function playSound(urlCore:String):void {
-			if (Main.flashVars.noContainerMode){
+			if (game.flashVars.noContainerMode){
 				SCClientSound.playSound(urlCore);
 			return;
 			}
@@ -40,7 +40,7 @@ package SCClient
 		}
 		
 		public function stopSound(urlCore:String):void {
-			if (Main.flashVars.noContainerMode){
+			if (game.flashVars.noContainerMode){
 				SCClientSound.stopSound(urlCore);
 			return;
 			}
@@ -49,7 +49,7 @@ package SCClient
 		}
 		
 		public function setAsButton(mc:MovieClip, urlCore:String):void {				
-			if (Main.flashVars.noContainerMode){
+			if (game.flashVars.noContainerMode){
 			SCClientSkin.setAsButton(mc, urlCore);
 			return;
 			}
@@ -59,7 +59,7 @@ package SCClient
 		public function setAsMovieClip(mc:MovieClip, urlCore:String, width:int = 0, height:int = 0):void
 		{
 
-			if (Main.flashVars.noContainerMode){
+			if (game.flashVars.noContainerMode){
 				SCClientSkin.setAsMovieClip(mc, urlCore);
 			return;
 			}
@@ -70,31 +70,31 @@ package SCClient
 		
 		public function addNewMedia(fileCore:String):void
 		{
-			if (Main.flashVars.noContainerMode)return
+			if (game.flashVars.noContainerMode)return
 			(Object(root) as Object).parent.addNewMedia(fileCore, false); // Пока не работает 
 		}
 		
 		public function saveAsNewTuneFile(data:String):void
 		{
-			if (Main.flashVars.noContainerMode)return
+			if (game.flashVars.noContainerMode)return
 			(Object(root) as Object).parent.santune(data); // Пока не работает
 		}
 		
 		public function saveScore(level:int, score:int, other:Object = null):void
 		{
-			if (Main.flashVars.noContainerMode)return
+			if (game.flashVars.noContainerMode)return
 			(Object(root) as Object).parent.savescore(level, score, other);
 		}
 		
 		public function showEndScreen(score:int, other:Object = null):void
 		{
-			if (Main.flashVars.noContainerMode)return
+			if (game.flashVars.noContainerMode)return
 			(Object(root) as Object).parent.showEndScreen(score, other);
 		}
 		
 		public function showMainMenu():void
 		{
-			if (Main.flashVars.noContainerMode)return
+			if (game.flashVars.noContainerMode)return
 			(Object(root) as Object).parent.restart();
 		}
 		

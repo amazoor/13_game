@@ -4,6 +4,7 @@ package view {
 	
 	import events.GameEvents;
 	
+	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
@@ -52,11 +53,13 @@ package view {
 			
 			if (_cardsUsed == MAX_TRIES - 1) {
 				_skin.showLastChance(true);
+				_inGame = true;
 			}
 			
 			if (_cardsUsed == MAX_TRIES) {
 				_isLastChance = true;
 				_skin.showRuleCard(true);
+				_inGame = true;
 				_cardsUsed = 0;
 			}
 		}
@@ -85,6 +88,7 @@ package view {
 				_skin.rulesCompleted = _rulesCompleted;
 				_skin.points += countPoints();
 				_skin.showRuleCard(true);
+				_inGame = true;
 				_rightAnswers = 0;
 				cardsUsed = 0;
 				
@@ -141,9 +145,9 @@ package view {
 			_skin.cardsLeftLabel = _cardsLeft;
 			cardsUsed++;
 			
-			if (cardsUsed <= 0) {
+			if (_cardsLeft <= 0) {
 				_isGameOver = true;
-				_cardsUsed = 0;
+				_cardsLeft = 0;
 			}
 		}
 		
@@ -157,6 +161,7 @@ package view {
 		}
 		
 		protected function nextButtonClick(event:Event):void {
+			_inGame = false;
 			_skin.showRuleCard(false);
 			_skin.showLastChance(false);
 			if (!_isLastChance)
@@ -170,17 +175,17 @@ package view {
 			_skin.generateCard(level);
 		}
 		
-		public function get cardRight():Image {
+		public function get cardRight():MovieClip {
 			return _skin.cardRight;
 		}
 		
-		public function get cardLeft():Image {
+		public function get cardLeft():MovieClip {
 			return _skin.cardLeft;
 		}
 		
 		protected function onYesClick(event:GameEvents = null):void {
-			cardsLeft--;
 			
+			cardsLeft--;
 			if(_rules.checkRule(sym)) {
 				_lastRightCardVO = sym.cloneVO();
 				TweenNano.to(sym, .4, {x:cardRight.x + cardRight.width / 2, y:cardRight.y + cardRight.height / 2, onComplete:rotate});
@@ -194,8 +199,9 @@ package view {
 			}
 			trace("+:", rightAnswers, " -:", _wrongAnswers);
 		}
-		
+		private var _inGame:Boolean;
 		protected function onNoClick(event:GameEvents = null):void {
+			
 			cardsLeft--;
 			if(_rules.checkRule(sym)) {
 				_lastRightCardVO = sym.cloneVO();
@@ -216,7 +222,7 @@ package view {
 		}
 		
 		private function finalRotate():void {
-			_skin.sym.imageSource = _skin.cardLeft.source;
+			sym.rotate();
 			TweenNano.to(sym, .2, {scaleX:1, ease:Linear.easeNone, onComplete:showNextCard});
 		}
 		
@@ -226,17 +232,21 @@ package view {
 		
 		private function showNextCard():void {
 			_skin.generateCard(level);
+			_inGame = false;
 		}
 		
 		protected function onKeyDown(event:KeyboardEvent):void {
+			if (_inGame) return;
 			switch(event.keyCode) {
 				case Keyboard.LEFT: {
 					onNoClick();
+					_inGame = true;
 					break;
 				}
 					
 				case Keyboard.RIGHT: {
 					onYesClick();
+					_inGame = true;
 					break;
 				}
 			}

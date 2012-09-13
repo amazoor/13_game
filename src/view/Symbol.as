@@ -4,8 +4,11 @@ package view {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.system.Security;
+	
+	import utils.ImageUtils;
 	
 	import view.symbol.BGAlphaStyle;
 	import view.symbol.BorderStyle;
@@ -37,11 +40,8 @@ package view {
 		public static const FILL:Array = [Fill.BORDER, Fill.FILL, Fill.GRADIENT];
 		public static const FIGURES_AMOUNT:Array = [1 , 2, 3];
 		
-		public function clone():Symbol {
-			var clone:Symbol = new Symbol();
-			clone.makeSymbol(bgColor, bgImageAlpah, borderStyle, figure, figureColor, fill, figuresAmount);
-			return clone;
-		}
+		
+		
 		
 		public function cloneVO():SymbolVO {
 			var symVO:SymbolVO	= new SymbolVO();
@@ -57,34 +57,6 @@ package view {
 		
 		public function makeSymbolFromVO(symVO:SymbolVO):void {
 			makeSymbol(symVO.bgColor, symVO.bgImageAlpah, symVO.borderStyle, symVO.figure, symVO.figureColor, symVO.fill, symVO.figuresAmount);
-		}
-		
-		private var _imageSource:String;
-		
-		public function get imageSource():String
-		{
-			return _imageSource;
-		}
-		
-		private var img:Image = new Image();
-		public function set imageSource(value:String):void
-		{
-			while(numChildren) {
-				removeChildAt(0);
-			}
-			
-			_imageSource = value;
-			img.addEventListener(ImageEvent.IMAGE_LOAD_COMPLETE, onImageLoaded);
-			img.source = value;
-			
-			addChild(img);
-			
-		}
-		
-		protected function onImageLoaded(event:ImageEvent):void
-		{
-			img.x = -img.width / 2;
-			img.y = -img.height/ 2;			
 		}
 		
 		public function makeSymbol(bgColor:uint = NaN, bgImageAlpha:String = "", borderStyle:String = "", firure:String = "", firureColor:uint = NaN, fill:String = "", figuresAmount:uint = NaN):void {
@@ -108,48 +80,31 @@ package view {
 			bg.graphics.endFill();
 			_container.addChild(bg);
 			
-			var bgImage:Image;
 			
-			
-			
-			
+			var bgImageSymbol:ClipSymbol = new ClipSymbol();
 			switch (bgImageAlpha) {
 				case BGAlphaStyle.HORIZONTAL_LINES:
-					bgImage = new Image("assets/symbols/symbol_11.png");
-					bgImage.y = 22;
+					bgImageSymbol.gotoAndStop(11);
+					bgImageSymbol.y = 22;
 					break;
 				
 				case BGAlphaStyle.NO_LINES:
-					bgImage = new Image();
-					bgImage.rotation = 90;
-					bgImage.scaleY = -1;
-					bgImage.x = 22;
+					bgImageSymbol.visible = false;
 					break;
 				
 				case BGAlphaStyle.DIAGONAL_LINES:
-					bgImage = new Image("assets/symbols/symbol_12.png");
+					bgImageSymbol.gotoAndStop(12);
 					break;
 			}
+			_container.addChild(bgImageSymbol);
 			
-			_container.addChild(bgImage);
-			
-			var border:Image;
+			var borderSymbol:ClipSymbol = new ClipSymbol();
 			switch (borderStyle) {
-				case BorderStyle.DASHED:
-					border = new Image("assets/symbols/symbol_14.png");
-					break;
-				
-				case BorderStyle.DOTS:
-					border = new Image("assets/symbols/symbol_15.png");
-					break;
-				
-				case BorderStyle.SOLID:
-					border = new Image("assets/symbols/symbol_13.png");
-					break;
-				
+				case BorderStyle.DASHED:	borderSymbol.gotoAndStop(14);	break;
+				case BorderStyle.DOTS:		borderSymbol.gotoAndStop(15);	break;
+				case BorderStyle.SOLID:		borderSymbol.gotoAndStop(13);	break;
 			}
-			
-			_container.addChild(border);
+			_container.addChild(borderSymbol);
 			
 			var canvas:Sprite = new Sprite();
 			canvas.graphics.beginFill(firureColor);
@@ -157,80 +112,102 @@ package view {
 			canvas.graphics.endFill();
 			
 			
-			var fig:Image = new Image();
-			fig.addEventListener(ImageEvent.IMAGE_LOAD_COMPLETE, drawShape);
+			var figSymbol:ClipSymbol = new ClipSymbol();
 			switch (firure) {
 				case FIgures.CIRCLE:
 					if (fill == Fill.FILL)
-						fig.source  = "assets/symbols/symbol_07.png";
+						figSymbol.gotoAndStop(7);
 					if (fill == Fill.BORDER)
-						fig.source  = "assets/symbols/symbol_09.png";
+						figSymbol.gotoAndStop(9);
 					if (fill == Fill.GRADIENT)
-						fig.source  = "assets/symbols/symbol_08.png";
+						figSymbol.gotoAndStop(8);
 					break;
 				
 				case FIgures.SQUARE:
 					if (fill == Fill.FILL)
-						fig.source  = "assets/symbols/symbol_01.png";
+						figSymbol.gotoAndStop(1);
 					if (fill == Fill.BORDER)
-						fig.source  = "assets/symbols/symbol_03.png";
+						figSymbol.gotoAndStop(3);
 					if (fill == Fill.GRADIENT)
-						fig.source  = "assets/symbols/symbol_02.png";
+						figSymbol.gotoAndStop(2);
 					break;
 				
 				case FIgures.TRIANGLE:
 					if (fill == Fill.FILL)
-						fig.source  = "assets/symbols/symbol_04.png";
+						figSymbol.gotoAndStop(4);
 					else if (fill == Fill.BORDER)
-						fig.source  = "assets/symbols/symbol_06.png";
+						figSymbol.gotoAndStop(6);
 					else if (fill == Fill.GRADIENT)
-						fig.source  = "assets/symbols/symbol_05.png";
+						figSymbol.gotoAndStop(5);
 					break;
 			}
+			
+			
+			var fig:BitmapData = new BitmapData(figSymbol.width, figSymbol.height, true, 0x00000000);
+			fig.draw(figSymbol);
+			figuresAmount = 3;
+			var bd:BitmapData = ImageUtils.getColorized(fig, figureColor);
+			switch (figuresAmount) {
+				case 1:
+					var bitmap:Bitmap = new Bitmap(bd);
+					addChild(bitmap);
+					bitmap.x = -figSymbol.width / 2;
+					bitmap.y = -figSymbol.height / 2;
+					break;
+				
+				case 2:
+					var bitmap21:Bitmap = new Bitmap(bd);
+					bitmap21.x += 10;
+					bitmap21.scaleX =bitmap21.scaleY = .5;  
+					addChild(bitmap21);
+					var bitmap22:Bitmap = new Bitmap(bd);
+					bitmap22.scaleX = bitmap22.scaleY = .5;
+					bitmap22.x -= bitmap22.width + 10;
+					bitmap21.y = bitmap22.y -= 30;
+					addChild(bitmap22);
+					break;
+				
+				case 3:
+					var b31:Bitmap = new Bitmap(bd);
+					var b32:Bitmap = new Bitmap(bd);
+					var b33:Bitmap = new Bitmap(bd);
+					
+					b31.x += 10;
+					b31.scaleX = b31.scaleY = .5;
+					b32.scaleX = b32.scaleY = .5;
+					b33.scaleX = b33.scaleY = .5;
+					b32.x -= b32.width + 10;
+					b33.x -= b33.width / 2;
+					b33.y -= b33.height + 10;
+					addChild(b33);
+					addChild(b32);
+					addChild(b31);
+			}
+			
+			figSymbol = null;
 			
 			_container.x = -_container.width / 2;
 			_container.y = -_container.height/ 2;
 		}
 		
-		private function drawShape(e:ImageEvent):void {
-			
-			var shape:Image = e.currentTarget as Image;
-			addChild(shape);
-			switch (figuresAmount) {
-				case 1:
-					shape.colorize(figureColor);
-					shape.x = -shape.width / 2;
-					shape.y = -shape.height / 2;
-					break;
-				
-				case 2:
-					shape.colorize(figureColor);
-					shape.x += 10;
-					shape.scaleX = shape.scaleY = .5;
-					var copy1:Image = shape.clone();
-					copy1.scaleX = copy1.scaleY = .5;
-					copy1.x -= copy1.width + 10;
-					shape.y = copy1.y -= 30;
-					addChild(copy1);
-					break;
-				
-				case 3:
-					shape.colorize(figureColor);
-					shape.x += 10;
-					shape.scaleX = shape.scaleY = .5;
-					var copy:Image = shape.clone();
-					copy.scaleX = copy.scaleY = .5;
-					var copyTop:Image = shape.clone();
-					copyTop.scaleX = copyTop.scaleY = .5;
-					copy.x -= copy.width + 10;
-					copyTop.x -= copyTop.width / 2;
-					copyTop.y -= copyTop.height + 10;
-					addChild(copyTop);
-					addChild(copy);
+		public function rotate():void {
+			while(numChildren) {
+				removeChildAt(0);
 			}
+			_container = null;
+			_container = new Sprite();
+			addChild(_container);
+			
+			var rubaha:ClipRubaha = new ClipRubaha();
+			_container.addChild(rubaha);
+			rubaha.gotoAndStop(_level);
+			_container.x = -_container.width / 2;
+			_container.y = -_container.height/ 2;
 		}
 		
+		private var _level:uint;
 		public function getSymbol(level:uint):void {
+			_level = level;
 			bgColor 		= BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)]; //Цвет фона:
 			bgImageAlpah 	= BG_IMAGE_ALPHAS[Math.floor(Math.random() * BG_IMAGE_ALPHAS.length)]; //Узор фона:
 			borderStyle 	= BORDER_STYLES[Math.floor(Math.random() * BORDER_STYLES.length)]; //Граница фона:

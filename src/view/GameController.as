@@ -10,7 +10,7 @@ package view
 	
 	public class GameController extends Sprite
 	{
-		[Embed (source="assets/bg/bg.jpg")]
+		[Embed (source="../assets/bg/bg.jpg")]
 		private var BG:Class;
 		
 		private var _screen:AbstractScreen;
