@@ -6,8 +6,6 @@ package view {
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
 	
 	import model.Rules;
 	import model.Screen;
@@ -29,14 +27,14 @@ package view {
 		private var _points				:uint;
 		private var _rulesCompleted		:uint;
 		private var _cardsUsed			:uint;
-		private var _skin				:GameSkin;
+		private var _skin				:GameSkinLogic;
 		private var _isLastChance		:Boolean;
 		private var _lastWrongCardVO	:SymbolVO = new SymbolVO();
 		private var _lastRightCardVO	:SymbolVO = new SymbolVO();
 		private var _isGameOver			:Boolean;
 		
 		public function GameScreen(startLevel:uint) {
-			_skin = new GameSkin();
+			_skin = new GameSkinLogic();
 			addChild(_skin);
 			this.level = startLevel;
 			_skin.rulesCompleted = 0;

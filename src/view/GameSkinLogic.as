@@ -1,7 +1,4 @@
 package view {
-	import com.greensock.TweenNano;
-	import com.greensock.easing.Linear;
-	
 	import events.GameEvents;
 	
 	import flash.display.MovieClip;
@@ -20,7 +17,7 @@ package view {
 	
 	import vo.SymbolVO;
 	
-	public class GameSkin extends Sprite {
+	public class GameSkinLogic extends Sprite {
 		private var _gameSkin:ClipGameScreen;
 		
 		private var _sym:Symbol = new Symbol();
@@ -32,7 +29,7 @@ package view {
 		private var _lastChance:ClipLastchance;
 		private var _ruleWas:ClipRulewas;
 		
-		public function GameSkin(){
+		public function GameSkinLogic(){
 			_gameSkin = new ClipGameScreen();
 			_lastChance =  new ClipLastchance();
 			_ruleWas    =  new ClipRulewas();

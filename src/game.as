@@ -10,9 +10,6 @@ package {
 	
 	[SWF(width="640", height="480", backgroundColor="0xCCCCCC")]
 	public class game extends Sprite implements IStartup {
-		[Embed(source="../assets/font/MyriadPro-Regular.otf",	fontName = "MPR",	mimeType = "application/x-font", advancedAntiAliasing="true", embedAsCFF="false")] private var MyriadProRegular:Class;
-		[Embed(source="../assets/font/MyriadPro-Semibold.otf", fontName = "MPS", mimeType = "application/x-font", advancedAntiAliasing="true", embedAsCFF="false")] private var MyriadProSemibold:Class;
-		
 		public static var flashVars			:Object;
 		public static var fixPath			:String;
 		
