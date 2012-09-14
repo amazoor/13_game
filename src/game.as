@@ -60,10 +60,7 @@ package {
 		
 		public function start(flashVars:Object=null):void
 		{
-			if (flashVars.level && flashVars.level > 0) 
-				var level:uint = flashVars.level;
-			else
-				level = 1;
+			var level:uint = 1;
 			addChild(_game);
 			_game.startGame(level);
 		}

@@ -33,6 +33,7 @@ package view {
 		private var _isLastChance		:Boolean;
 		private var _lastWrongCardVO	:SymbolVO = new SymbolVO();
 		private var _lastRightCardVO	:SymbolVO = new SymbolVO();
+		private var _isGameOver			:Boolean;
 		
 		public function GameScreen(startLevel:uint) {
 			_skin = new GameSkin();
@@ -40,8 +41,9 @@ package view {
 			this.level = startLevel;
 			_skin.rulesCompleted = 0;
 			_skin.showRuleCard(false);
-			this.addEventListener(Event.ADDED_TO_STAGE, init);
+			init();
 			_skin.showLastChance(false);
+			
 		}
 		
 		public function get cardsUsed():int {
@@ -53,20 +55,16 @@ package view {
 			
 			if (_cardsUsed == MAX_TRIES - 1) {
 				_skin.showLastChance(true);
-				_inGame = true;
 			}
 			
 			if (_cardsUsed == MAX_TRIES) {
 				_isLastChance = true;
 				_skin.showRuleCard(true);
-				_inGame = true;
 				_cardsUsed = 0;
 			}
 		}
 		
-		private function init(event:Event):void {
-			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		private function init():void {
 			startLevel(level);
 			_skin.addEventListener(GameEvents.NO_CLICK, onNoClick);
 			_skin.addEventListener(GameEvents.YES_CLICK, onYesClick);
@@ -88,7 +86,6 @@ package view {
 				_skin.rulesCompleted = _rulesCompleted;
 				_skin.points += countPoints();
 				_skin.showRuleCard(true);
-				_inGame = true;
 				_rightAnswers = 0;
 				cardsUsed = 0;
 				
@@ -122,7 +119,6 @@ package view {
 		private function gameOver():void {
 			if (_isGameOver) {
 				_isGameOver = true;
-				stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 				_skin.removeEventListener(GameEvents.NO_CLICK, onNoClick);
 				_skin.removeEventListener(GameEvents.YES_CLICK, onYesClick);
 				_skin.removeEventListener(GameEvents.NEXT_CLICK, nextButtonClick);
@@ -139,7 +135,7 @@ package view {
 		public function get cardsLeft():uint{
 			return _skin.cardsLeft;
 		}
-		private var _isGameOver:Boolean;
+		
 		public function set cardsLeft(value:uint):void {
 			_cardsLeft = value;
 			_skin.cardsLeftLabel = _cardsLeft;
@@ -161,7 +157,6 @@ package view {
 		}
 		
 		protected function nextButtonClick(event:Event):void {
-			_inGame = false;
 			_skin.showRuleCard(false);
 			_skin.showLastChance(false);
 			if (!_isLastChance)
@@ -184,7 +179,7 @@ package view {
 		}
 		
 		protected function onYesClick(event:GameEvents = null):void {
-			
+			_skin.blocker = true;
 			cardsLeft--;
 			if(_rules.checkRule(sym)) {
 				_lastRightCardVO = sym.cloneVO();
@@ -199,9 +194,9 @@ package view {
 			}
 			trace("+:", rightAnswers, " -:", _wrongAnswers);
 		}
-		private var _inGame:Boolean;
+		
 		protected function onNoClick(event:GameEvents = null):void {
-			
+			_skin.blocker = true;
 			cardsLeft--;
 			if(_rules.checkRule(sym)) {
 				_lastRightCardVO = sym.cloneVO();
@@ -231,27 +226,8 @@ package view {
 		}
 		
 		private function showNextCard():void {
-			_skin.generateCard(level);
-			_inGame = false;
+			_skin.blocker = false;
+			_skin.generateCard(level);	
 		}
-		
-		protected function onKeyDown(event:KeyboardEvent):void {
-			if (_inGame) return;
-			switch(event.keyCode) {
-				case Keyboard.LEFT: {
-					onNoClick();
-					_inGame = true;
-					break;
-				}
-					
-				case Keyboard.RIGHT: {
-					onYesClick();
-					_inGame = true;
-					break;
-				}
-			}
-		}
-		
-		
 	}
 }

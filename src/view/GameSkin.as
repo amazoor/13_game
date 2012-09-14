@@ -7,7 +7,9 @@ package view {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	
 	import view.symbol.BGAlphaStyle;
@@ -49,26 +51,51 @@ package view {
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedTosStage);
 		}
+		private var _blocker:Boolean;
+
+		public function get blocker():Boolean{
+			return _blocker;
+		}
+
+		public function set blocker(value:Boolean):void {
+			_blocker = value;
+		}
+
+		protected function onKeyDown(event:KeyboardEvent):void {
+			switch(event.keyCode) {
+				case Keyboard.LEFT: {
+					onNoClick();
+					break;
+				}
+					
+				case Keyboard.RIGHT: {
+					onYesClick();
+					break;
+				}
+			}
+		}
 		
 		protected function onAddedTosStage(event:Event):void {
 			_gameSkin.x = stage.stageWidth / 2 - _gameSkin.width / 2;
 			_gameSkin.y = stage.stageHeight/ 2 - _gameSkin.height/ 2;
-			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			_gameSkin.eYes.addEventListener(MouseEvent.CLICK, onYesClick);
 			_gameSkin.eNo.addEventListener(MouseEvent.CLICK, onNoClick);
 			_ruleWas.eNext.addEventListener(MouseEvent.CLICK, onNextButtonClick);
 			_lastChance.eNext.addEventListener(MouseEvent.CLICK, onNextButtonClick);	
 		}
 		
-		protected function onNextButtonClick(event:MouseEvent):void {
+		protected function onNextButtonClick(event:MouseEvent = null):void {
 			dispatchEvent(new GameEvents(GameEvents.NEXT_CLICK));
 		}
 		
 		public function showRuleCard(show:Boolean):void {
+			_blocker = show;
 			_ruleWas.visible = show;
 		}
 		
 		public function showLastChance(show:Boolean):void {
+			_blocker = show;
 			_lastChance.visible = show;
 		}
 		
@@ -148,11 +175,13 @@ package view {
 			_ruleWas.eRuleWas.text = text;
 		}
 		
-		protected function onNoClick(event:MouseEvent):void{
+		protected function onNoClick(event:MouseEvent = null):void{
+			if (_blocker) return;
 			dispatchEvent(new GameEvents(GameEvents.NO_CLICK));
 		}
 		
-		protected function onYesClick(event:MouseEvent):void{
+		protected function onYesClick(event:MouseEvent = null):void{
+			if (_blocker) return;
 			dispatchEvent(new GameEvents(GameEvents.YES_CLICK));
 		}
 		

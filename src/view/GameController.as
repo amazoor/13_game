@@ -40,7 +40,7 @@ package view
 		private var _level:uint;
 		public function startGame(level:uint):void {
 			_level = level;
-			_screen = new TitleScreen();
+			screen = new GameScreen(_level);
 			addChild(_screen);
 			_screen.addEventListener(GameEvents.SHOW_SCREEN, onChangeScreen);
 		}
@@ -55,9 +55,9 @@ package view
 					screen = new GameScreen(_level);
 					break;
 				
-				case Screen.TITLE_SCREEN:
+				/*case Screen.TITLE_SCREEN:
 					screen = new TitleScreen();
-					break;
+					break;*/
 				
 				case Screen.GAME_OVER_SCREEN:
 					screen = new GameOverScreen(event.level, event.points, event.rules);
