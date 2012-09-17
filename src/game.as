@@ -13,12 +13,11 @@ package {
 		public static var flashVars			:Object;
 		public static var fixPath			:String;
 		
-		private var _sccClientController	:SCClientController;
-		private var _game					:GameController;
+		public static var sccClientController	:SCClientController = new SCClientController();
+		private var _game						:GameController;
 		
 		public function game() {
 			_game				 = new GameController();
-			_sccClientController = new SCClientController();
 			
 			if (stage) 
 				initApplication();
@@ -40,7 +39,7 @@ package {
 			game.flashVars = flashVars;
 			
 			if (!flashVars) {
-				game.flashVars = { };
+				game.flashVars = { noContainerMode:true};
 				game.flashVars.levels = [];
 				loadLevel();
 			}

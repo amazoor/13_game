@@ -1,6 +1,7 @@
 package view {
 	import events.GameEvents;
 	
+	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -29,6 +30,12 @@ package view {
 		private var _lastChance:ClipLastchance;
 		private var _ruleWas:ClipRulewas;
 		
+		[Embed(source="../assets/no.png")]	private var NO:Class;
+		[Embed(source="../assets/yes.png")]	private var YES:Class;
+		
+		private var _no:Bitmap;
+		private var _yes:Bitmap;
+		
 		public function GameSkinLogic(){
 			_gameSkin = new ClipGameScreen();
 			_lastChance =  new ClipLastchance();
@@ -46,8 +53,28 @@ package view {
 			_lastChance.x = _ruleWas.x = 319 - 78;
 			_lastChance.y = _ruleWas.y = 267 - 78;
 			
+			_no  = new NO as Bitmap;
+			_yes = new YES as Bitmap;
+			
+			addChild(_no);
+			addChild(_yes);
+			
+			_no.x  = _gameSkin.width / 2 - _no.width / 2;
+			_yes.x = _gameSkin.width / 2 - _yes.width / 2;
+			_no.y = _yes.y = 230;
+			_no.visible = _yes.visible = false;
+			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedTosStage);
 		}
+		
+		public function showNO(show:Boolean):void {
+			_no.visible = show;
+		}
+		
+		public function showYES(show:Boolean):void {
+			_yes.visible = show;
+		}
+		
 		private var _blocker:Boolean;
 
 		public function get blocker():Boolean{
@@ -75,6 +102,7 @@ package view {
 		protected function onAddedTosStage(event:Event):void {
 			_gameSkin.x = stage.stageWidth / 2 - _gameSkin.width / 2;
 			_gameSkin.y = stage.stageHeight/ 2 - _gameSkin.height/ 2;
+			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			_gameSkin.eYes.addEventListener(MouseEvent.CLICK, onYesClick);
 			_gameSkin.eNo.addEventListener(MouseEvent.CLICK, onNoClick);

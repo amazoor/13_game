@@ -6,6 +6,7 @@ package view
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
+	import model.Rules;
 	import model.Screen;
 	
 	public class GameController extends Sprite
@@ -60,7 +61,9 @@ package view
 					break;*/
 				
 				case Screen.GAME_OVER_SCREEN:
-					screen = new GameOverScreen(event.level, event.points, event.rules);
+					game.sccClientController.showEndScreen(event.points, {rulesCompleted:event.rules, level:event.level});
+					game.sccClientController.saveScore(event.level, event.points, {rulesCompleted:event.rules});
+					//screen = new GameOverScreen(event.level, event.points, event.rules);
 					break;
 			}
 			
