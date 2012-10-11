@@ -28,6 +28,7 @@ package SCClient
 				mems = { };
 				var s:Sound = new Sound();
 				mems.sound = s;
+				trace(game.flashVars.mainUrl + game.flashVars.gameId +game.fixPath + "sounds/" + snd + ".mp3");
 				s.load(new URLRequest(game.flashVars.mainUrl + game.flashVars.gameId + game.fixPath + "sounds/" + snd + ".mp3"));				
 				s.addEventListener(Event.COMPLETE, playIt);
 			}

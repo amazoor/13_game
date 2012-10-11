@@ -3,6 +3,7 @@ package {
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.external.ExternalInterface;
 	
 	import interfaces.IStartup;
 	
@@ -27,7 +28,8 @@ package {
 		
 		private function initApplication(event:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, initApplication);
-			ready();
+			if (!ExternalInterface.available)
+				ready();
 		}
 		
 		public function callAdminPanel():void {
@@ -39,7 +41,8 @@ package {
 			game.flashVars = flashVars;
 			
 			if (!flashVars) {
-				game.flashVars = { noContainerMode:true};
+				game.flashVars = {};
+				game.flashVars.noContainerMode = true
 				game.flashVars.levels = [];
 				loadLevel();
 			}
@@ -54,10 +57,20 @@ package {
 			
 		}
 		
-		public function start(flashVars:Object=null):void
-		{
-			var level:uint = 1;
+		public function start(flashVars:Object=null):void {
 			addChild(_game);
+			if (!ExternalInterface.available) {
+				game.flashVars.noContainerMode = false;
+			} else {
+				game.flashVars.noContainerMode = true;
+			}
+			
+			fixPath = "/tunes/"; // - префикс для запуска локально 
+			  if (game.flashVars.noContainerMode)
+			  {
+				   fixPath = "/game/tunes/"; // - префикс для запуска с контейнера 
+			  }
+			var level:int = 1
 			_game.startGame(level);
 		}
 		

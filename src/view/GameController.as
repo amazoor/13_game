@@ -32,9 +32,11 @@ package view
 					_screen.removeEventListener(GameEvents.SHOW_SCREEN, onChangeScreen);
 					removeChild(_screen);
 					_screen = null;
+					
 				}
 				
 				_screen = value;
+				_screen.addEventListener(GameEvents.PLAY_SOUND, onPlay);
 			}
 		}
 		
@@ -54,6 +56,7 @@ package view
 				
 				case Screen.PLAY_SCREEN:trace(_level)
 					screen = new GameScreen(_level);
+					
 					break;
 				
 				/*case Screen.TITLE_SCREEN:
@@ -69,6 +72,11 @@ package view
 			
 			addChild(_screen);
 			_screen.addEventListener(GameEvents.SHOW_SCREEN, onChangeScreen);
+			
+		}
+		
+		protected function onPlay(event:GameEvents):void {
+			game.sccClientController.playSound(event.soundName);
 		}
 	}
 }

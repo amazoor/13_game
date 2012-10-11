@@ -77,11 +77,17 @@ package view {
 			return _rightAnswers;
 		}
 		
+		private function playSound(sound:String):void {
+			var event:GameEvents = new GameEvents(GameEvents.PLAY_SOUND);
+			event.soundName = sound;
+			dispatchEvent(event);
+		}
+		
 		public function set rightAnswers(value:uint):void {
 			_rightAnswers = value;
 			if(_rightAnswers == WIN_RULE_TRIES) {
 				_rulesCompleted++;
-				game.sccClientController.playSound("rule_complete");
+				playSound("rule_complete")
 				_skin.rulesCompleted = _rulesCompleted;
 				_skin.points += countPoints();
 				_skin.showRuleCard(true);
@@ -151,6 +157,18 @@ package view {
 		}
 		
 		public function set level(value:uint):void {
+			trace(value);
+			trace(_level)
+			trace(_skin)
+			trace(_skin.points)
+			trace(_skin.rulesCompleted)
+			
+			game.sccClientController.scc_trace(value);
+			game.sccClientController.scc_trace(_level);
+			game.sccClientController.scc_trace(_skin);
+			game.sccClientController.scc_trace(_skin.points);
+			game.sccClientController.scc_trace(_skin.rulesCompleted);
+			
 			game.sccClientController.saveScore(_level, _skin.points, {rulesCompleted:_skin.rulesCompleted});
 			_level = value;
 			_skin.level = level;
@@ -186,14 +204,14 @@ package view {
 				TweenNano.to(sym, .4, {x:cardRight.x + cardRight.width / 2, y:cardRight.y + cardRight.height / 2, onComplete:rotate});
 				rightAnswers++;
 				wrongAnswers = 0;
-				game.sccClientController.playSound("right");
+				playSound("right");
 				_skin.showYES(true);
 			} else {
 				_lastWrongCardVO = sym.cloneVO();
 				TweenNano.to(sym, .4, {x:cardLeft.x + cardLeft.width / 2, y:cardLeft.y + cardLeft.height / 2, onComplete:rotate});
 				rightAnswers = 0;
 				wrongAnswers++;
-				game.sccClientController.playSound("wrong");
+				playSound("wrong");
 				_skin.showNO(true);
 			}
 			trace("+:", rightAnswers, " -:", _wrongAnswers);
@@ -207,14 +225,14 @@ package view {
 				TweenNano.to(sym, .4, {x:cardRight.x + cardRight.width / 2, y:cardRight.y + cardRight.height / 2, onComplete:rotate});
 				rightAnswers = 0;
 				wrongAnswers++;
-				game.sccClientController.playSound("wrong");
+				playSound("wrong");
 				_skin.showNO(true);
 			} else {
 				_lastWrongCardVO = sym.cloneVO();
 				TweenNano.to(sym, .4, {x:cardLeft.x + cardLeft.width / 2, y:cardLeft.y + cardLeft.height / 2, onComplete:rotate});
 				rightAnswers++;
 				wrongAnswers = 0;
-				game.sccClientController.playSound("right");
+				playSound("right");
 				_skin.showYES(true);
 			}
 			trace("+:", rightAnswers, " -:", _wrongAnswers);

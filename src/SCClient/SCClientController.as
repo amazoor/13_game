@@ -82,7 +82,11 @@ package SCClient
 		
 		public function saveScore(level:int, score:int, other:Object = null):void
 		{
-			if (game.flashVars.noContainerMode)return
+			
+			
+			if (game.flashVars.noContainerMode)
+				
+				return
 			(Object(root) as Object).parent.savescore(level, score, other);
 		}
 		
