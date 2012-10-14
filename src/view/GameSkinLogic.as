@@ -75,16 +75,6 @@ package view {
 			_yes.visible = show;
 		}
 		
-		private var _blocker:Boolean;
-
-		public function get blocker():Boolean{
-			return _blocker;
-		}
-
-		public function set blocker(value:Boolean):void {
-			_blocker = value;
-		}
-
 		protected function onKeyDown(event:KeyboardEvent):void {
 			switch(event.keyCode) {
 				case Keyboard.LEFT: {
@@ -107,20 +97,31 @@ package view {
 			_gameSkin.eYes.addEventListener(MouseEvent.CLICK, onYesClick);
 			_gameSkin.eNo.addEventListener(MouseEvent.CLICK, onNoClick);
 			_ruleWas.eNext.addEventListener(MouseEvent.CLICK, onNextButtonClick);
-			_lastChance.eNext.addEventListener(MouseEvent.CLICK, onNextButtonClick);	
+			_lastChance.eNext.addEventListener(MouseEvent.CLICK, onNextLCButtonClick);	
+		}
+		
+		protected function onNextLCButtonClick(event:MouseEvent):void
+		{
+			var e:GameEvents=new GameEvents(GameEvents.NEXT_CLICK);
+			e.newRule = false;
+			dispatchEvent(e);
+		}
+		
+		public function get skin():ClipGameScreen {
+			return _gameSkin;
 		}
 		
 		protected function onNextButtonClick(event:MouseEvent = null):void {
-			dispatchEvent(new GameEvents(GameEvents.NEXT_CLICK));
+			var e:GameEvents=new GameEvents(GameEvents.NEXT_CLICK);
+			e.newRule = true
+			dispatchEvent(e);
 		}
 		
 		public function showRuleCard(show:Boolean):void {
-			_blocker = show;
 			_ruleWas.visible = show;
 		}
 		
 		public function showLastChance(show:Boolean):void {
-			_blocker = show;
 			_lastChance.visible = show;
 		}
 		
@@ -196,17 +197,15 @@ package view {
 				else if (value["figuresAmount"] == 3)
 					text += "3";
 			}
-			
+			trace(_ruleWas.eRuleWas.text)
 			_ruleWas.eRuleWas.text = text;
 		}
 		
 		protected function onNoClick(event:MouseEvent = null):void{
-			if (_blocker) return;
 			dispatchEvent(new GameEvents(GameEvents.NO_CLICK));
 		}
 		
 		protected function onYesClick(event:MouseEvent = null):void{
-			if (_blocker) return;
 			dispatchEvent(new GameEvents(GameEvents.YES_CLICK));
 		}
 		

@@ -28,7 +28,7 @@ package {
 		
 		private function initApplication(event:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, initApplication);
-			if (!ExternalInterface.available)
+			//if (!ExternalInterface.available)
 				ready();
 		}
 		

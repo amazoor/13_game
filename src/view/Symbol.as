@@ -76,7 +76,7 @@ package view {
 			
 			var bg:Sprite = new Sprite();
 			bg.graphics.beginFill(bgColor);
-			bg.graphics.drawRect(0, 0, WIDTH, HEIGHT);
+			bg.graphics.drawRect(3, 3, WIDTH-3, HEIGHT-3);
 			bg.graphics.endFill();
 			_container.addChild(bg);
 			

@@ -76,7 +76,7 @@ package view
 		}
 		
 		protected function onPlay(event:GameEvents):void {
-			game.sccClientController.playSound(event.soundName);
+		//	game.sccClientController.playSound(event.soundName);
 		}
 	}
 }

@@ -14,10 +14,10 @@ package view {
 	
 	public class GameScreen extends AbstractScreen {
 		public static const MAX_CARDS			:uint = 90;
-		public static const MAX_TRIES			:uint = 20;
-		public static const MAX_WRONG_TRIES		:uint = 10;
+		public static const MAX_TRIES			:uint = 3 //20;
+		public static const MAX_WRONG_TRIES		:uint = 3//10;
 		public static const WIN_RULE_TRIES		:uint = 5;
-		public static const RULES_TO_NEXT_LEVEL	:uint = 10;
+		public static const RULES_TO_NEXT_LEVEL	:uint = 3//10;
 		
 		private var _rules:Rules = new Rules();
 		private var _rightAnswers		:uint;
@@ -52,11 +52,13 @@ package view {
 			_cardsUsed = value;
 			
 			if (_cardsUsed == MAX_TRIES - 1) {
+				fullBlock(true);
 				_skin.showLastChance(true);
 			}
 			
 			if (_cardsUsed == MAX_TRIES) {
 				_isLastChance = true;
+				fullBlock(true);
 				_skin.showRuleCard(true);
 				_cardsUsed = 0;
 			}
@@ -90,6 +92,7 @@ package view {
 				playSound("rule_complete")
 				_skin.rulesCompleted = _rulesCompleted;
 				_skin.points += countPoints();
+				fullBlock(true);
 				_skin.showRuleCard(true);
 				_rightAnswers = 0;
 				cardsUsed = 0;
@@ -157,28 +160,17 @@ package view {
 		}
 		
 		public function set level(value:uint):void {
-			trace(value);
-			trace(_level)
-			trace(_skin)
-			trace(_skin.points)
-			trace(_skin.rulesCompleted)
-			
-			game.sccClientController.scc_trace(value);
-			game.sccClientController.scc_trace(_level);
-			game.sccClientController.scc_trace(_skin);
-			game.sccClientController.scc_trace(_skin.points);
-			game.sccClientController.scc_trace(_skin.rulesCompleted);
-			
 			game.sccClientController.saveScore(_level, _skin.points, {rulesCompleted:_skin.rulesCompleted});
 			_level = value;
 			_skin.level = level;
 		}
 		
-		protected function nextButtonClick(event:Event):void {
+		protected function nextButtonClick(event:GameEvents):void {
 			_skin.showRuleCard(false);
 			_skin.showLastChance(false);
-			if (!_isLastChance)
-				_skin.rule = _rules.generateRule(level);
+			fullBlock(false);
+			if (event.newRule)
+			_skin.rule = _rules.generateRule(level);
 		}
 		
 		private function startLevel(level:uint):void {
@@ -197,7 +189,8 @@ package view {
 		}
 		
 		protected function onYesClick(event:GameEvents = null):void {
-			_skin.blocker = true;
+			if (_blockUI) return;
+			blockUI(true);
 			cardsLeft--;
 			if(_rules.checkRule(sym)) {
 				_lastRightCardVO = sym.cloneVO();
@@ -214,11 +207,12 @@ package view {
 				playSound("wrong");
 				_skin.showNO(true);
 			}
-			trace("+:", rightAnswers, " -:", _wrongAnswers);
 		}
-		
-		protected function onNoClick(event:GameEvents = null):void {
-			_skin.blocker = true;
+		private var _blockUI:Boolean;
+		private var _fullBlock:Boolean;
+		protected function onNoClick(event:GameEvents = null):void {trace(_blockUI)
+			if (_blockUI) return;
+			blockUI(true);
 			cardsLeft--;
 			if(_rules.checkRule(sym)) {
 				_lastRightCardVO = sym.cloneVO();
@@ -235,7 +229,6 @@ package view {
 				playSound("right");
 				_skin.showYES(true);
 			}
-			trace("+:", rightAnswers, " -:", _wrongAnswers);
 		}
 		
 		private function rotate():void {
@@ -251,10 +244,24 @@ package view {
 			return _skin.sym;
 		}
 		
+		private function blockUI(block:Boolean):void {
+			if (_fullBlock && !block) return; 
+			_blockUI = block;
+			_skin.skin.eYes.mouseEnabled = !block;
+			_skin.skin.eNo.mouseEnabled = !block;
+		}
+		
+		private function fullBlock(block:Boolean):void {
+			_fullBlock = block;
+			_blockUI = block;
+			_skin.skin.eYes.mouseEnabled = !block;
+			_skin.skin.eNo.mouseEnabled = !block;
+		}
+		
 		private function showNextCard():void {
 			_skin.showYES(false);
 			_skin.showNO(false);
-			_skin.blocker = false;
+			blockUI(false);
 			_skin.generateCard(level);	
 		}
 	}

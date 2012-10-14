@@ -1,4 +1,5 @@
 package model {
+	import flash.sampler.NewObjectSample;
 	import flash.utils.Dictionary;
 	
 	import view.Symbol;
@@ -42,16 +43,26 @@ package model {
 		public function get dict():Dictionary {
 			return _dict;
 		}
-
+		
 		public function set dict(value:Dictionary):void {
 			_dict = value;
 		}
-
+		private var _currentRule:Dictionary;
+		
 		public  function generateRule(level:uint):Dictionary {
+			
 			_rule = this["RULE_"+level][Math.floor(Math.random() * this["RULE_"+level].length)];
+			
 			dict = new Dictionary();
+			
 			trace(_rule)
-			switch (_rule) {
+			
+			dict = getRule(_rule);
+			
+			while (_currentRule == dict)
+				dict = getRule(_rule);
+			_currentRule = dict;
+			/*switch (_rule) {
 				case "figureColor":		dict[_rule] = FIGURE_COLORS[Math.floor(Math.random() * FIGURE_COLORS.length)];		break;
 				case "fill":			dict[_rule] = FILL[Math.floor(Math.random() * FILL.length)];						break;
 				case "figure":			dict[_rule] = FIGURES[Math.floor(Math.random() * FIGURES.length)];					break;
@@ -60,8 +71,22 @@ package model {
 				case "borderStyle":		dict[_rule] = BORDER_STYLES[Math.floor(Math.random() * BORDER_STYLES.length)];		break;
 				case "figuresAmount":	dict[_rule] = FIGURES_AMOUNT[Math.floor(Math.random() * FIGURES_AMOUNT.length)];	break;
 			}
-			
+				*/		
 			return dict;
+		}
+		
+		private function getRule(rule:String):Dictionary {
+			var d:Dictionary = new Dictionary();
+			switch (_rule) {
+				case "figureColor":		d[_rule] = FIGURE_COLORS[Math.floor(Math.random() * FIGURE_COLORS.length)];		break;
+				case "fill":			d[_rule] = FILL[Math.floor(Math.random() * FILL.length)];						break;
+				case "figure":			d[_rule] = FIGURES[Math.floor(Math.random() * FIGURES.length)];					break;
+				case "bgColor":			d[_rule] = BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];				break;
+				case "bgImageAlpah":	d[_rule] = BG_IMAGE_ALPHAS[Math.floor(Math.random() * BG_IMAGE_ALPHAS.length)];	break;
+				case "borderStyle":		d[_rule] = BORDER_STYLES[Math.floor(Math.random() * BORDER_STYLES.length)];		break;
+				case "figuresAmount":	d[_rule] = FIGURES_AMOUNT[Math.floor(Math.random() * FIGURES_AMOUNT.length)];	break;
+			}
+			return d;
 		}
 		
 		public  function checkRule(symbol:Symbol):Boolean {

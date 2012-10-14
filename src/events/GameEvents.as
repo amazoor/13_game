@@ -11,7 +11,7 @@ package events {
 		public var soundName:String;
 		
 		public var screen:String;
-		
+		public var newRule:Boolean;
 		public var level	:uint;
 		public var rules	:uint;
 		public var points	:uint;
